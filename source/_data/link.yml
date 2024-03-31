@@ -1,0 +1,36 @@
+- class_name: 大佬们
+  class_desc: 对本站有帮助的大佬们
+  link_list:
+    - name: Akilarの糖果屋
+      link: https://akilar.top/
+      siteshot: https://npm.elemecdn.com/akilar-friends@latest/siteshot/akilar.top.jpg
+      avatar: https://npm.elemecdn.com/akilar-friends@latest/avatar/akilar.top.jpg
+      descr: 欢迎光临糖果屋
+    - name: Leonus
+      link: https://blog.leonus.cn/
+      avatar: https://q1.qlogo.cn/g?b=qq&nk=553344777&s=5
+      descr: 进一寸有进一寸的欢喜。
+      rss: '/atom.xml'
+    - name: 小康博客
+      link: https://www.antmoe.com/
+      avatar: https://cdn.afdelivr.top/npm/kang-static@latest/avatar.jpg
+      descr: 一个收藏回忆与分享技术的地方！
+    - name: 陈YFの博客
+      link: https://blog.cyfan.top/
+      avatar: https://npm.elemecdn.com/chenyfan-oss@3
+      descr: 一个在互联网角落挣扎的小小博客，很小很小。
+- class_name: 友情链接
+  class_desc: 那些人，那些事
+  link_list:
+    - name: Liynw
+      link: https://www.liynw.top/
+      descr: 杂谈教程与学习笔记。
+      avatar: https://cdn.afdelivr.top/npm/liynw-blog@1.0.2/img/avatar.webp
+      color: "#99ebff"
+- class_name: 推荐
+  class_desc: 有意思的网站
+  link_list:
+    - name: acwifi
+      link: https://www.acwifi.net/
+      descr: 路由器交流-无线路由器使用分享与评测对比
+      avatar: https://www.acwifi.net/wp-content/uploads/2016/09/acwifi-pc-logo5.png

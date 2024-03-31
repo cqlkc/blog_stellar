@@ -1,0 +1,114 @@
+bbtalk:
+  layout: markdown
+  title: 说说
+  content: |
+    <div id = "bber-talk"></div>
+    <script defer data-pjax src = "/js/timeago.min.js"></script>
+    <script defer data-pjax src = "/js/bbtalk.js"></script>
+fcir:
+  layout: timeline
+  title: 近期动态
+  api:  # 你的朋友圈数据文件地址
+  type: fcircle
+  limit: 15 # 可通过这个限制最大数量
+
+recent:
+  layout: recent
+  rss:  /atom.xml # npm i hexo-generator-feed
+  limit: 5 # Count of posts
+fortunate:
+  layout: markdown
+  title: 今日运势
+  content: |
+    <div id="fortune-result"></div><div id="recommendations"></div><script data-pjax>async function getUserIP(){try{const response=await fetch('https://api.ipify.org?format=json');const data=await response.json();return data.ip;}catch(error){console.error('Error fetching IP:',error);return null;}}
+    async function generateUserFeatureNumber(){try{const userAgent=navigator.userAgent||'Unknown User Agent';const userIP=await getUserIP()||'Unknown IP';const featureNumber=hashString(userAgent+userIP);console.log('User Agent:',userAgent);console.log('User IP:',userIP);console.log('User Feature Number:',featureNumber);return featureNumber;}catch(error){console.error('Error generating user feature number:',error);return null;}}
+    const seed_user=generateUserFeatureNumber();function hashString(str){let hash=0;for(let i=0;i<str.length;i++){const char=str.charCodeAt(i);hash=(hash<<5)-hash+char;}
+    return hash;}
+    function krandom(seed){return('0.'+Math.sin(seed).toString().substr(6));}
+    function getCurrentDate(){const today=new Date();const year=today.getFullYear();const month=String(today.getMonth()+1).padStart(2,'0');const day=String(today.getDate()).padStart(2,'0');return`${year}-${month}-${day}`;}
+    function getStoredRecommendations(){const storedDate=localStorage.getItem('recommendationsDate');const currentDate=getCurrentDate();return storedDate===currentDate?JSON.parse(localStorage.getItem('recommendations')):null;}
+    function saveRecommendationsToStorage(recommendations){const currentDate=getCurrentDate();localStorage.setItem('recommendationsDate',currentDate);localStorage.setItem('recommendations',JSON.stringify(recommendations));}
+    function generateRecommendations(){const currentDate=getCurrentDate();const Activities=[['内卷：卷王附体','内卷：享受生活'],['打赌：翻车','打赌：必胜'],['宅家：自宅警备员','宅家：'],['上网：surfing!','上网：请先报备'],['考试：考神附体','考试：身败名裂']];const randomGoodIndex=Math.floor(krandom(hashString(seed_user+currentDate))*Activities.length);const randomBadIndex=Math.floor(krandom(hashString(seed_user+currentDate+'123'))*Activities.length);return{good:Activities[randomGoodIndex][0],bad:Activities[randomBadIndex][1],};}
+    function showRecommendationsResult(){const storedRecommendations=getStoredRecommendations();const recommendationsResult=storedRecommendations!==null?storedRecommendations:generateRecommendations();saveRecommendationsToStorage(recommendationsResult);const recommendationsElement=document.getElementById('recommendations');recommendationsElement.innerHTML=`<p>宜${recommendationsResult.good}</p><p>忌${recommendationsResult.bad}</p>`;}
+    function getCurrentFortune(){const storedDate=localStorage.getItem('fortuneDate');const currentDate=getCurrentDate();return storedDate===currentDate?localStorage.getItem('fortune'):null;}
+    function saveFortuneToStorage(fortune){const currentDate=getCurrentDate();localStorage.setItem('fortuneDate',currentDate);localStorage.setItem('fortune',fortune);}
+    function generateFortune(){const fortunes=['大吉','吉','小吉','小凶','凶','大凶'];const randomIndex=Math.floor(krandom(seed_user)*fortunes.length);return fortunes[randomIndex];}
+    function showFortuneResult(){const storedFortune=getCurrentFortune();const fortuneResult=storedFortune!==null?storedFortune:generateFortune();saveFortuneToStorage(fortuneResult);const resultElement=document.getElementById('fortune-result');resultElement.textContent=`今日运势：${fortuneResult}`;}
+    function handlePjax(){showFortuneResult();showRecommendationsResult();}
+    window.addEventListener('pjax:end',handlePjax);handlePjax();</script>
+hitokoto:
+  layout: markdown
+  title: 一言
+  content: |
+    <p id="hitokoto_all"><a href="#" id="hitokoto_text">思考中🤔...</a></p>
+    <script async data-pjax>
+        fetch('https://v1.hitokoto.cn')
+        .then(function (res){
+        return res.json();
+    })
+        .then(function (data) {
+        var hitokoto_all = document.getElementById('hitokoto_all');
+        hitokoto_all.innerText = data.hitokoto + "  —— " + data.from_who +"《" + data.from + '》' ; 
+    })
+        .catch(function (err) {
+        console.error(err);
+    })
+    </script>
+jiejiari:
+  layout: markdown
+  title: 快乐摸鱼
+  content: |
+    <div class="sidebar">
+    <div id="countdown" class="countdown"></div>
+    <div id="holiday" class="holiday"></div>
+    </div>
+    <script async data-pjax>
+    // 定义中国大陆的节假日日期
+    let cout = function() {
+      const holidays = {
+      '元旦': '2024-01-01',
+      '春节': '2024-02-10',
+      '清明节': '2024-04-04',
+      '劳动节': '2024-05-01',
+      '端午节': '2024-06-10',
+      '中秋节': '2024-09-17',
+      '国庆节': '2024-10-01'
+    };
+    // 获取当前日期
+    const now = new Date();
+    // 计算距离下一个节假日还有多少时间
+    function getNextHolidayCountdown(holidays, now) {
+      const dates = Object.values(holidays).map(holiday => new Date(holiday)).sort((a, b) => a - b);
+      const nextHoliday = dates.find(date => date >= now);
+      const totalSeconds = (nextHoliday - now) / 1000;
+      const days = Math.floor(totalSeconds / (3600 * 24));
+      const hours = Math.floor(totalSeconds % (3600 * 24) / 3600);
+      const minutes = Math.floor(totalSeconds % 3600 / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+      return { days, hours, minutes, seconds, holiday: Object.keys(holidays).find(key => holidays[key] === nextHoliday.toISOString().split('T')[0]) };
+    }
+    // 更新DOM元素显示倒计时
+    function updateCountdownDisplay() {
+      const countdown = getNextHolidayCountdown(holidays, new Date());
+      document.getElementById('holiday').textContent = `距离${countdown.holiday}`;
+      document.getElementById('countdown').textContent = `还有${countdown.days}天${countdown.hours}小时${countdown.minutes}分钟${countdown.seconds}秒`;
+    }
+    // 每秒更新倒计时
+    setInterval(updateCountdownDisplay, 1000);
+    }
+    cout();
+    document.addEventListener('pjax:complete', () => {
+    cout();
+    })
+    </script>
+poems:
+  layout: markdown
+  title: 每日诗词
+  content : |
+    <span id="jinrishici-sentence">正在加载今日诗词....</span>
+    <script data-pjax async src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+notication:
+  layout: markdown
+  title: 公告
+  content: |
+    本破站在浏览过程中可能会遇见bug，一般刷新就好了，如果不行可以留言告诉博主~(￣▽￣)~*
